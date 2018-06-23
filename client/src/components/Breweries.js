@@ -10,7 +10,11 @@ import {
   Divider,
   Button,
 } from 'semantic-ui-react'
+import styled from 'styled-components'
 
+const StyledCard = styled(Card)`
+  height: 300px;
+`
 
 
 class Breweries extends React.Component {
@@ -25,7 +29,7 @@ class Breweries extends React.Component {
     const {breweries} = this.props;
     return breweries.map(brewery => {
       return (
-        <Card key={brewery.id}>
+        <StyledCard key={brewery.id}>
           <Card.Content>
           {brewery.images ? this.image(brewery) : <Image centered size='small' src={stockImage} />}
             <Card.Header>{brewery.name}</Card.Header>
@@ -39,7 +43,7 @@ class Breweries extends React.Component {
               {/* View */}
             {/* </Link> */}
           </Card.Content>
-        </Card>
+        </StyledCard>
       );
     });
   }
@@ -48,8 +52,9 @@ class Breweries extends React.Component {
   render() {
     return (
       <Container>
-        <Header as="h2" textAlign="center">Beers</Header>
-        <Divider />
+      <Divider />
+        <Header as="h2" textAlign="center" color="yellow">Breweries</Header>
+      <Divider />
         <Card.Group itemsPerRow={5}>
           { this.displayBreweries() }
         </Card.Group>
