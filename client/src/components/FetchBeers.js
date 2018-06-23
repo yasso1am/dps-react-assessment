@@ -4,7 +4,7 @@ import { Route } from 'react-router-dom'
 
 import Beers from './Beers'
 
-import { getBeers } from '../reducers/beers'
+// import { getBeers } from '../reducers/beers'
 
 class FetchBeers extends React.Component { 
 

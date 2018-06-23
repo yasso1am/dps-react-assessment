@@ -1,4 +1,4 @@
-import axios from 'axios'
+// import axios from 'axios'
 const GET_BEERS = 'GET_BEERS'
 
 // export const getBeers = (page) => {

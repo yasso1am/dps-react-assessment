@@ -2,18 +2,21 @@ import React from 'react'
 import axios from 'axios'
 import { Link } from 'react-router-dom'
 // import { getBeers } from '../reducers/beers'
-import {setFlash} from '../actions/flash';
+// import {setFlash} from '../actions/flash';
 import { connect } from 'react-redux'
 import {
+  Segment,
   Container, 
   Header,
   Card,
   Image,
-  Dropdown,
+  // Dropdown,
   Divider,
-  Button,
+  // Button,
 } from 'semantic-ui-react'
 import styled from 'styled-components'
+import InfiniteScroll from 'react-infinite-scroller'
+
 
 
 const StyledCard = styled(Card)`
@@ -28,20 +31,31 @@ const Truncated = styled.div`
 `
 
 class Beers extends React.Component {
-  state = { beers: [] }
+  state = { beers: [], page: 1, hasMore: true }
 
   componentDidMount() {
     this.getBeers(this.props)
   }
 
+ 
   getBeers = (props, page = 1) => {
-    const { dispatch } = this.props
     const url = `/api/all_beers/?page=${page}&per_page=10`
       axios.get(url)
         .then(res => {
-         this.setState( {beers: res.data.entries} ) 
-        })
+          const data  = res.data
+            if (data.total_pages === page) {
+            this.setState({ beers: [...this.state.beers, ...data.entries], total_pages: data.total_pages, hasMore: false })
+          } else {
+            this.setState({beers: [...this.state.beers, ...data.entries], page: this.state.page + 1 } )
+          }
+      })
   }
+
+  loadMore = () => {
+    const page = this.state.page
+    this.getBeers(this.props, page)
+   }
+
   
 
   label = (beer) => (
@@ -50,12 +64,12 @@ class Beers extends React.Component {
 
   displayBeers = () => {
     const { beers } = this.state;
-    return beers.map(beer => {
+    return beers.map( (beer, i) => {
       return (
-        <StyledCard key={beer.id}>
+        <StyledCard key={i}>
           {beer.labels ? this.label(beer) : <Image centered size="tiny" src={stockImage} /> }
           <Card.Content>
-            <Card.Header>{beer.name}</Card.Header>
+            {beer.name ? <Card.Header>{beer.name}</Card.Header> : <Card.Header>No Name</Card.Header>}
             <Card.Meta> ABV: {beer.abv}</Card.Meta>
             <Card.Meta> {beer.style.name} </Card.Meta>
           </Card.Content>
@@ -75,17 +89,25 @@ class Beers extends React.Component {
   }
 
   render() {
+    const { page, hasMore } = this.state
     return (
-      <div>
-      <Container>
-      <Divider />
-        <Header as="h2" textAlign="center" color="yellow">Beers</Header>
+      <Segment inverted>
         <Divider />
-        <Card.Group itemsPerRow={5}>
-          { this.displayBeers() }
-        </Card.Group>
-      </Container>
-      </div>
+          <Header as="h2" textAlign="center" color="yellow">Beers</Header>
+          <Divider />
+        <Container style={{height: '100vh', overflowY:'scroll', overflowX:'hidden'}}>
+          <InfiniteScroll
+            pageStart={page}
+            loadMore={this.loadMore}
+            hasMore={hasMore}
+            useWindow={false}
+          >
+          <Card.Group itemsPerRow={5}>
+            { this.displayBeers() }
+          </Card.Group>
+          </InfiniteScroll>
+        </Container>
+      </Segment>
     )
   }
 }

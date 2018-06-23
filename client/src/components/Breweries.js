@@ -6,9 +6,9 @@ import {
   Header,
   Card,
   Image,
-  Dropdown,
+  // Dropdown,
   Divider,
-  Button,
+  // Button,
 } from 'semantic-ui-react'
 import styled from 'styled-components'
 
