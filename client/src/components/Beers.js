@@ -4,6 +4,9 @@ import { Link } from 'react-router-dom'
 // import { getBeers } from '../reducers/beers'
 // import {setFlash} from '../actions/flash';
 import { connect } from 'react-redux'
+import {setFlash} from '../actions/flash'
+import styled from 'styled-components'
+import InfiniteScroll from 'react-infinite-scroller'
 import {
   Segment,
   Container, 
@@ -14,21 +17,18 @@ import {
   Divider,
   // Button,
 } from 'semantic-ui-react'
-import styled from 'styled-components'
-import InfiniteScroll from 'react-infinite-scroller'
+
 import SearchEngine from './SearchEngine'
 
 
-//STYLEDCOMPONENTS
-
+//STYLED COMPONENTS
 const stockImage = 'https://www.goodfreephotos.com/albums/vector-images/beer-vector-art.png'
 
 const StyledCard = styled(Card)`
   height: 250px;
 `
 
-
-
+//CLASS STARTS
 class Beers extends React.Component {
   state = { beers: [], page: 1, hasMore: true, visible: [], search: '' }
 
@@ -39,6 +39,7 @@ class Beers extends React.Component {
 
   //AXIOS GETS BEERS AS LONG AS THERE ARE BEERS TO GET, 10 BEERS AT A TIME
   getBeers = (props, page = 1) => {
+    const { dispatch } = this.props
     const url = `/api/all_beers/?page=${page}&per_page=10`
     axios.get(url)
       .then(res => {
@@ -48,6 +49,9 @@ class Beers extends React.Component {
           } else {
             this.setState({ beers: [...this.state.beers, ...data.entries], page: this.state.page + 1 } )
           }
+        })
+        .catch(error => {
+          dispatch(setFlash('Where did the beers go? Please try again later!'))
         })
       }
   
@@ -63,7 +67,10 @@ class Beers extends React.Component {
       axios.get(`/api/search_beers?query=${term}`)
         .then(res => {
           this.setState({beers: res.data.entries})
-        });
+        })
+        .catch( error => {
+          dispatch(setFlash('Your beer does not seem to exist! Search again') )
+        })
       }
 
   //FUNCTIONS TO HELP DISPLAY BEERS
@@ -105,7 +112,9 @@ class Beers extends React.Component {
             { this.beerStyle(beer)}
           </Card.Content>
           <Card.Content extra>
-            <Link to={`/beers/${beer.id}`}>
+            <Link 
+              to={`/beers/${beer.name}`}
+              >
               View Beer
            </Link>
           </Card.Content>
@@ -114,16 +123,17 @@ class Beers extends React.Component {
     });
   }
 
-  //WHAT IS ACTUALLY BEING RENDERED ON THE PAGE
+  //WHAT IS ACTUALLY BEING RENDERED ON THE PAGE - violation on scroll in console but works
   render() {
     const { page, hasMore } = this.state
     return (
-      <Segment inverted>
+      <Segment>
         <Divider />
           <Header as="h2" textAlign="center" color="yellow">Beers</Header>
           <SearchEngine onSearch={this.search} />
           <Divider />
         <Container style={{height: '100vh', overflowY:'scroll', overflowX:'hidden'}}>
+        {/* scroll is throwing a violation in the console and wants me to mark handler as passive, but I don't know what this is  */}
           <InfiniteScroll
             pageStart={page}
             loadMore={this.loadMore}

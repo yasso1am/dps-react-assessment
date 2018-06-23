@@ -1,16 +1,6 @@
 import React from 'react';
-import {Button, Input, Segment} from 'semantic-ui-react';
-import styled from 'styled-components';
+import {Input} from 'semantic-ui-react';
 
-  
-const Search = styled(Input) `
-  background-color: black !important;
-  color: white !important;
-`
-const Bar = styled(Segment) `
-    background-color: black !important;
-  color: white !important;
-`
 
 class SearchEngine extends React.Component {
   state = {term: ''}
@@ -22,15 +12,13 @@ class SearchEngine extends React.Component {
 
   render() {
     return (
-      <Bar basic textAlign='center'>
-        <Search
+      <Input 
           fluid
           focus
           value={this.state.term}
           onChange={e => this.onChange(e.target.value)}
           placeholder='Search for a beer'
         />
-      </Bar>
     );
   }
 }
