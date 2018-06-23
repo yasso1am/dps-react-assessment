@@ -6,7 +6,8 @@ import Home from './Home';
 import { Switch, Route } from 'react-router-dom';
 import { Segment } from 'semantic-ui-react';
 
-import Beers from './Beers';
+// import Beers from './Beers';
+import FetchBeers from './FetchBeers'
 
 
 class App extends Component {
@@ -17,7 +18,7 @@ class App extends Component {
         <Flash />
         <Switch>
           <Route exact path='/' component={Home} />
-          <Route exact path='/beers' component={Beers} />
+          <Route path='/beers' component={FetchBeers} />
           <Route component={NoMatch} />
         </Switch>
       </Segment>

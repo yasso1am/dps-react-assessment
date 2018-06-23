@@ -1,5 +1,6 @@
 import React from 'react'
-import axios from 'axios'
+// import axios from 'axios'
+import { connect } from 'react-redux'
 import {
   Container, 
   Header,
@@ -11,22 +12,22 @@ import {
 } from 'semantic-ui-react'
 
 class Beers extends React.Component {
-  state = { beers: [] }
-
-  componentDidMount(){
-    axios.get('/api/all_beers')
-      .then( res => this.setState({ beers: res.data.entries }) )
-  }
 
   displayBeers = () => {
-    const {beers} = this.state;
+    const {beers} = this.props;
+    debugger
     return beers.map(beer => {
       return (
-        <Card key={beer.name}>
+        <Card key={beer.id}>
+        
+          {/* <Image size='large' src={beer.labels.large} /> */}
           <Card.Content>
             <Card.Header>{beer.name}</Card.Header>
             <Card.Meta> ABV: {beer.abv}</Card.Meta>
           </Card.Content>
+          <Card.Description>
+            { beer.description }
+          </Card.Description>
           <Card.Content extra>
             {/* <Link to={`/beers/${beer.name}`}> */}
               {/* View */}
@@ -55,11 +56,12 @@ class Beers extends React.Component {
 
 
 
+const mapStateToProps = (state) => {
+  const { beers } = state
+  return {
+    beers,
+  }
+}
 
-
-
-
-
-
-export default Beers
+export default connect(mapStateToProps)(Beers)
 
