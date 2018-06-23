@@ -56,28 +56,45 @@ class Beers extends React.Component {
     this.getBeers(this.props, page)
    }
 
+  beerName = (beer) => {
+    return (
+      beer.name ? <Card.Header>{beer.name}</Card.Header> : <Card.Header>No Name</Card.Header>
+    )}
   
+  beerLabel = (beer) => {
+    return (
+      beer.labels ? <Image centered size='tiny' src={beer.labels.medium} /> : <Image centered size='tiny' src={stockImage} />
+    )}
 
-  label = (beer) => (
-    <Image centered size='tiny' src={beer.labels.medium} />
-  )
+  beerStyle = (beer) => {
+    const style = beer.style
+    debugger
+    // I have an error here when a beer.style.name is undefined I can't seem to manage it! //
+    // I fixed it! I was checking if beer.style.name was undefined, I just needed to check if beer.style was undefined
+    if (typeof style === "undefined")
+      return <Card.Meta> No style at all </Card.Meta>
+    else
+    return (
+      style.name ? <Card.Meta> {style.name} </Card.Meta> : <Card.Meta> I am beer </Card.Meta> 
+    )}
+
+  beerAbv = (beer) => {
+    return(
+      beer.abv ? <Card.Meta> ABV: {beer.abv}</Card.Meta> : <Card.Meta> Unknown </Card.Meta>
+    )
+  }
 
   displayBeers = () => {
     const { beers } = this.state;
     return beers.map( (beer, i) => {
       return (
         <StyledCard key={i}>
-          {beer.labels ? this.label(beer) : <Image centered size="tiny" src={stockImage} /> }
+          { this.beerLabel(beer) }
           <Card.Content>
-            {beer.name ? <Card.Header>{beer.name}</Card.Header> : <Card.Header>No Name</Card.Header>}
-            <Card.Meta> ABV: {beer.abv}</Card.Meta>
-            <Card.Meta> {beer.style.name} </Card.Meta>
+            { this.beerName(beer) }
+            { this.beerAbv(beer) }
+            { this.beerStyle(beer)}
           </Card.Content>
-          <Truncated>
-          {/* <Card.Description>
-            { beer.description }
-          </Card.Description> */}
-          </Truncated>
           <Card.Content extra>
             <Link to={`/beers/${beer.id}`}>
               View Beer
