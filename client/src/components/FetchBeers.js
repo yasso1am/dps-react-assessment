@@ -8,9 +8,9 @@ import { getBeers } from '../reducers/beers'
 
 class FetchBeers extends React.Component { 
 
-  componentDidMount() {
-    this.props.dispatch(getBeers())
-  }
+  // componentDidMount() {
+  //   this.props.dispatch(getBeers(5))
+  // }
 
   render() {
       return(

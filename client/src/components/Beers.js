@@ -1,5 +1,7 @@
 import React from 'react'
-// import axios from 'axios'
+import axios from 'axios'
+// import { getBeers } from '../reducers/beers'
+import {setFlash} from '../actions/flash';
 import { connect } from 'react-redux'
 import {
   Container, 
@@ -12,17 +14,32 @@ import {
 } from 'semantic-ui-react'
 
 class Beers extends React.Component {
+  state = { beers: [] }
 
+  componentDidMount() {
+    this.getBeers(this.props)
+  }
+
+  getBeers = (props, page = 1) => {
+    const { dispatch } = this.props
+      axios.get('/api/all_beers?page=1&per_page=12')
+        .then(res => {
+         this.setState( {beers: res.data.entries} ) 
+        })
+  }
+  
+  
   label = (beer) => (
-    <Image size='large' src={beer.labels.large} />
+    <Image centered size='large' src={beer.labels.large} />
   )
 
   displayBeers = () => {
-    const {beers} = this.props;
+    const { beers } = this.state;
+    debugger
     return beers.map(beer => {
       return (
         <Card key={beer.id}>
-          {beer.labels ? this.label(beer) : <Image src={stockImage} /> }
+          {beer.labels ? this.label(beer) : <Image centered size="small" src={stockImage} /> }
           <Card.Content>
             <Card.Header>{beer.name}</Card.Header>
             <Card.Meta> ABV: {beer.abv}</Card.Meta>
@@ -58,13 +75,13 @@ class Beers extends React.Component {
 
 
 
-const mapStateToProps = (state) => {
-  const { beers } = state
-  return {
-    beers,
-  }
-}
+// const mapStateToProps = (state) => {
+//   const { beers } = state
+//   return {
+//     beers,
+//   }
+// }
 
-export default connect(mapStateToProps)(Beers)
+export default connect()(Beers)
 
 const stockImage = 'https://www.goodfreephotos.com/albums/vector-images/beer-vector-art.png'

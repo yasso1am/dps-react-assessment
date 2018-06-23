@@ -17,7 +17,7 @@ class Breweries extends React.Component {
   
   image = (brewery) => {
     return (
-      <Image size='medium' src={brewery.images.medium} />
+      <Image centered size='large' src={brewery.images.large} />
     )
   }
   
@@ -27,7 +27,7 @@ class Breweries extends React.Component {
       return (
         <Card key={brewery.id}>
           <Card.Content>
-          {brewery.images ? this.image(brewery) : <Image size='medium' src={stockImage} />}
+          {brewery.images ? this.image(brewery) : <Image centered size='small' src={stockImage} />}
             <Card.Header>{brewery.name}</Card.Header>
             <Card.Meta>{brewery.website}</Card.Meta>
           </Card.Content>
