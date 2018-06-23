@@ -11,22 +11,29 @@ import {
   Button,
 } from 'semantic-ui-react'
 
-class Beers extends React.Component {
 
-  displayBeers = () => {
-    const {beers} = this.props;
-    return beers.map(beer => {
+
+class Breweries extends React.Component {
+  
+  image = (brewery) => {
+    return (
+      <Image size='medium' src={brewery.images.medium} />
+    )
+  }
+  
+  displayBreweries = () => {
+    const {breweries} = this.props;
+    return breweries.map(brewery => {
       return (
-        <Card key={beer.id}>
-        
-          {/* <Image size='large' src={beer.labels.large} /> */}
+        <Card key={brewery.id}>
           <Card.Content>
-            <Card.Header>{beer.name}</Card.Header>
-            <Card.Meta> ABV: {beer.abv}</Card.Meta>
+          {brewery.images ? this.image(brewery) : <Image src={stockImage} />}
+            <Card.Header>{brewery.name}</Card.Header>
+            <Card.Meta>{brewery.website}</Card.Meta>
           </Card.Content>
-          <Card.Description>
+          {/* <Card.Description>
             { beer.description }
-          </Card.Description>
+          </Card.Description> */}
           <Card.Content extra>
             {/* <Link to={`/beers/${beer.name}`}> */}
               {/* View */}
@@ -36,14 +43,15 @@ class Beers extends React.Component {
       );
     });
   }
-
+  
+  
   render() {
     return (
       <Container>
         <Header as="h2" textAlign="center">Beers</Header>
         <Divider />
         <Card.Group itemsPerRow={5}>
-          { this.displayBeers() }
+          { this.displayBreweries() }
         </Card.Group>
       </Container>
     )
@@ -56,11 +64,14 @@ class Beers extends React.Component {
 
 
 const mapStateToProps = (state) => {
-  const { beers } = state
+  const { breweries } = state
   return {
-    beers,
+    breweries,
   }
 }
 
-export default connect(mapStateToProps)(Beers)
 
+export default connect(mapStateToProps)(Breweries)
+
+
+const stockImage = 'https://www.goodfreephotos.com/albums/vector-images/beer-vector-art.png'
