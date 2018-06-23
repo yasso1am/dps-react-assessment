@@ -27,7 +27,7 @@ class Breweries extends React.Component {
       return (
         <Card key={brewery.id}>
           <Card.Content>
-          {brewery.images ? this.image(brewery) : <Image src={stockImage} />}
+          {brewery.images ? this.image(brewery) : <Image size='medium' src={stockImage} />}
             <Card.Header>{brewery.name}</Card.Header>
             <Card.Meta>{brewery.website}</Card.Meta>
           </Card.Content>
@@ -74,4 +74,4 @@ const mapStateToProps = (state) => {
 export default connect(mapStateToProps)(Breweries)
 
 
-const stockImage = 'https://www.goodfreephotos.com/albums/vector-images/beer-vector-art.png'
+const stockImage = 'https://upload.wikimedia.org/wikipedia/commons/9/91/Logo_bi%C3%A8re.svg'

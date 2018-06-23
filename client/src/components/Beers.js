@@ -13,13 +13,16 @@ import {
 
 class Beers extends React.Component {
 
+  label = (beer) => (
+    <Image size='large' src={beer.labels.large} />
+  )
+
   displayBeers = () => {
     const {beers} = this.props;
     return beers.map(beer => {
       return (
         <Card key={beer.id}>
-        
-          {/* <Image size='large' src={beer.labels.large} /> */}
+          {beer.labels ? this.label(beer) : <Image src={stockImage} /> }
           <Card.Content>
             <Card.Header>{beer.name}</Card.Header>
             <Card.Meta> ABV: {beer.abv}</Card.Meta>
@@ -64,3 +67,4 @@ const mapStateToProps = (state) => {
 
 export default connect(mapStateToProps)(Beers)
 
+const stockImage = 'https://www.goodfreephotos.com/albums/vector-images/beer-vector-art.png'
