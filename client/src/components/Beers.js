@@ -22,8 +22,10 @@ class Beers extends React.Component {
 
   getBeers = (props, page = 1) => {
     const { dispatch } = this.props
-      axios.get('/api/all_beers?page=1&per_page=12')
+    const url = `/api/all_beers/?page=${page}&per_page=10`
+      axios.get(url)
         .then(res => {
+          debugger
          this.setState( {beers: res.data.entries} ) 
         })
   }
@@ -35,7 +37,6 @@ class Beers extends React.Component {
 
   displayBeers = () => {
     const { beers } = this.state;
-    debugger
     return beers.map(beer => {
       return (
         <Card key={beer.id}>
