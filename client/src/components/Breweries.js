@@ -12,18 +12,25 @@ import {
   Divider,
 } from 'semantic-ui-react'
 import styled from 'styled-components'
+import SearchEngine from './SearchEngine'
 
+
+//STYLED COMPONENTS
 const StyledCard = styled(Card)`
   height: 300px;
 `
+const stockImage = 'https://upload.wikimedia.org/wikipedia/commons/9/91/Logo_bi%C3%A8re.svg'
 
+//CLASS STARTS
 class Breweries extends React.Component {
   state = { breweries: [], page: 1, hasMore: true, visible: [], search: '' }
 
+  //LIFECYCLE METHOD
   componentDidMount() {
     this.getBreweries(this.props)
   }
 
+  //GET 10 BREWERIES AT A TIME AS LONG AS THERE ARE BREWERIES TO GET
   getBreweries = (props, page = 1) => {
     const { dispatch } = this.props
     const url = `/api/all_breweries/?page=${page}&per_page=10`
@@ -41,11 +48,14 @@ class Breweries extends React.Component {
           })
         }
   
+  //INCREMENT PAGE AND CALL GETBREWERIES
   loadMore = () => {
     const page = this.state.page
     this.getBreweries(this.props, page)
     }
 
+
+  //LIVE SEARCH OF BREWERIES
   search = (term) => {
     const {dispatch} = this.props;
       axios.get(`/api/search_breweries?query=${term}`)
@@ -95,6 +105,7 @@ class Breweries extends React.Component {
       <Segment inverted>
         <Divider />
           <Header as="h2" textAlign="center" color="yellow">Breweries</Header>
+          <SearchEngine onSearch={this.search} />
         <Divider />
         <Container style={{height: '100vh', overflowY:'scroll', overflowX:'hidden'}}>
         <InfiniteScroll
@@ -129,4 +140,3 @@ const mapStateToProps = (state) => {
 export default connect(mapStateToProps)(Breweries)
 
 
-const stockImage = 'https://upload.wikimedia.org/wikipedia/commons/9/91/Logo_bi%C3%A8re.svg'

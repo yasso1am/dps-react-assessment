@@ -17,7 +17,7 @@ class SearchEngine extends React.Component {
           focus
           value={this.state.term}
           onChange={e => this.onChange(e.target.value)}
-          placeholder='Search for a beer'
+          placeholder='What are you looking for?'
         />
     );
   }
