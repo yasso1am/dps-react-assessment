@@ -17,4 +17,5 @@ Break: Saturday 6/23 @ 20:10 PST - I had to pull my
     pure functions can only have one outcome/must be immutable, so even though I was just passing in parameters and outputing
     according to those params, there were two possible outcomes. I'm guessing that's why it wouldn't work?
 Back: Saturday 6/23 @ 20:30 PST - wife and I made salmon and potatoes with lemon, garlic and butter. Super delish
+Stop: Saturday 6/23 @ 21:30 PST - enough is enough. Some thing have been cleared up, others have been mudied.
 
