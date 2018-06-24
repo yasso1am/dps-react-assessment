@@ -3,11 +3,12 @@ import axios from 'axios';
 import styled from 'styled-components';
 import {Link} from 'react-router-dom'
 import {
+  Grid,
   Segment,
+  Divider,
   Header,
   Image,
   Container,
-  Grid,
   Button
 } from 'semantic-ui-react';
 
@@ -20,50 +21,68 @@ class BeerView extends React.Component {
 
   componentDidMount() {
     const {id} = this.props.match.params
-    debugger
     axios.get(`/api/beer/${id}`)
       .then(res => {
         this.setState({beer: res.data.entries[0]})
       })
   }
 
-  //FUNCTIONS TO HELP DISPLAY BEERS
-  // beerName = (beer) => {
-  //   return (
-  //     beer.name ? <Header>{beer.name}</Header> : <CHeader>No Name<Header>
-  //   )}
+  // FUNCTIONS TO HELP DISPLAY BEERS
+  beerName = (beer) => {
+    return (
+      beer.name ? <Header textAlign='center' as="h2" color='yellow'>{beer.name}</Header> : <Header textAlign='center' as="h2" color='yellow'>Beer Name Unavailable</Header>
+    )}
   
   beerLabel = (beer) => {
     return (
       beer.labels ? <Image centered size='large' src={beer.labels.large} /> : <Image centered size='large' src={stockImage} />
     )}
 
-  // beerStyle = (beer) => {
-  //   const style = beer.style
-  //   if (typeof style === "undefined")
-  //     return <Card.Meta> No style at all </Card.Meta>
-  //   else
-  //   return (
-  //     style.name ? <Card.Meta> {style.name} </Card.Meta> : <Card.Meta> I am beer </Card.Meta> 
-  //   )}
+  beerStyle = (beer) => {
+    const style = beer.style
+    if (typeof style === "undefined")
+      return  <p> No style at all </p>
+    else
+    return (
+      style.name ?  <Header  as="h3" color='yellow'> {style.name} </Header>  :   <Header as="h3" color='yellow'> 'I am beer' </Header> 
+    )}
 
-  // beerAbv = (beer) => {
-  //   return(
-  //     beer.abv ? <Card.Meta> ABV: {beer.abv}</Card.Meta> : <Card.Meta> Unknown </Card.Meta>
-  //   )
-  // }
-
+  beerAbv = (beer) => {
+    return(
+      beer.abv ? <Header as="h3" color='yellow'> ABV: {beer.abv}</Header> : <Header as="h3" color='yellow'> ABV: Unavailable </Header>
+    )
+  }
+  
+  beerDescription = (beer) => {
+    return(
+      beer.description ? <p> {beer.description} </p> : <p> No description available </p>
+    )
+  }
       render() {
       const { beer }  = this.state
       return (
-        <Segment >
-            { this.beerLabel(beer)}
-        </Segment>
+        <Container>
+        <Divider />
+          <Segment>
+        <Grid>
+          <Grid.Row>
+            <Grid.Column width={8}>
+              { this.beerName(beer) }
+              { this.beerDescription(beer)}
+            </Grid.Column>
+            <Grid.Column width={8}>
+              { this.beerLabel(beer) }
+            </Grid.Column>
+          </Grid.Row>
+          <Grid.Row>
+            { this.beerAbv(beer) }
+            { this.beerStyle(beer) }
+          </Grid.Row>
+        </Grid>
+          </Segment>
+        </Container>
       )
   }
 }
-
-
-const defaultImage = 'http://pickledwig.com/wp-content/themes/directorypress/thumbs/na.gif'
 
 export default BeerView

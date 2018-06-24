@@ -127,7 +127,7 @@ class Beers extends React.Component {
   render() {
     const { page, hasMore } = this.state
     return (
-      <Segment>
+      <Segment inverted>
         <Divider />
           <Header as="h2" textAlign="center" color="yellow">Beers</Header>
           <SearchEngine onSearch={this.search} />
