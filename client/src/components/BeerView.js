@@ -1,16 +1,28 @@
 import React from 'react';
 import axios from 'axios';
+import Beers from './Beers'
 import {
   Grid,
+  Button,
   Segment,
   Divider,
   Header,
   Image,
   Container,
 } from 'semantic-ui-react';
+import styled from 'styled-components'
+
 
 
 const stockImage = 'https://www.goodfreephotos.com/albums/vector-images/beer-vector-art.png'
+
+const ButtonLink = styled.a`
+  float: left;
+  padding: 10px 30px;
+  border-radius: 10px;
+  color: black;
+  background-color: white;
+`
 
 
 class BeerView extends React.Component {
@@ -61,7 +73,7 @@ class BeerView extends React.Component {
       const { beer }  = this.state
       return (
         <Container>
-          <Divider />
+          <Divider /> 
             <Segment>
               <Grid>
                 <Grid.Row>
@@ -77,6 +89,12 @@ class BeerView extends React.Component {
                 </Grid.Row>
               </Grid>
             </Segment>
+            <ButtonLink
+                href={'http://localhost:3000/beers'}
+                rel="noopener norefferer"
+                >
+                Back
+                </ButtonLink>
         </Container>
       )
   }
