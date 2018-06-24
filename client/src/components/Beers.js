@@ -11,9 +11,7 @@ import {
   Header,
   Card,
   Image,
-  // Dropdown,
   Divider,
-  // Button,
 } from 'semantic-ui-react'
 
 import SearchEngine from './SearchEngine'
@@ -28,7 +26,7 @@ const StyledCard = styled(Card)`
 
 //CLASS STARTS
 class Beers extends React.Component {
-  state = { beers: [], page: 1, hasMore: true, visible: [], search: '' }
+  state = { beers: [], page: 5, hasMore: true, visible: [], search: '' }
 
   //LIFECYCLE METHOD
   componentDidMount() {
@@ -36,7 +34,7 @@ class Beers extends React.Component {
   }
 
   //AXIOS GETS BEERS AS LONG AS THERE ARE BEERS TO GET, 10 BEERS AT A TIME
-  getBeers = (props, page = 1) => {
+  getBeers = (props, page = 5) => {
     const { dispatch } = this.props
     const url = `/api/all_beers/?page=${page}&per_page=10`
     axios.get(url)
@@ -61,13 +59,9 @@ class Beers extends React.Component {
 
   //LIVE SEARCH OF BEERS INCLUDING AXIOS CALL/QUERY      
   search = (term) => {
-    const {dispatch} = this.props;
       axios.get(`/api/search_beers?query=${term}`)
         .then(res => {
           this.setState({beers: res.data.entries})
-        })
-        .catch( error => {
-          dispatch(setFlash('Your beer does not seem to exist! Search again') )
         })
       }
 

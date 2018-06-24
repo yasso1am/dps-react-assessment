@@ -12,4 +12,9 @@ Break: Saturday 6/23 @ 14:50 PST - FORNITE
     did my axios call to props.match.params, it was actually going to the controller with the name, then using the 
     brewery db gm to convert that over into the id? I clearly need some explaination here.
 Back: Saturday 6/23 @ 17:55 PST - that was a long break, but I won fortnite twice and went grocery shopping and walked the dog
+Break: Saturday 6/23 @ 20:10 PST - I had to pull my
+    logic out of my reducers because it wouldn't seem to work with "if/else" in the function. My recollection is that reducers/
+    pure functions can only have one outcome/must be immutable, so even though I was just passing in parameters and outputing
+    according to those params, there were two possible outcomes. I'm guessing that's why it wouldn't work?
+Back: Saturday 6/23 @ 20:30 PST - wife and I made salmon and potatoes with lemon, garlic and butter. Super delish
 

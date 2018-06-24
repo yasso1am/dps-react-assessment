@@ -24,7 +24,4 @@ class SearchEngine extends React.Component {
 }
 
 
-
-
-
 export default SearchEngine

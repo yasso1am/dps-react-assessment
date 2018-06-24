@@ -19,7 +19,15 @@ import SearchEngine from './SearchEngine'
 const StyledCard = styled(Card)`
   height: 300px;
 `
-const stockImage = 'https://upload.wikimedia.org/wikipedia/commons/9/91/Logo_bi%C3%A8re.svg'
+
+const Truncated = styled.div`
+  width: 175px;
+  white-space: nowrap;
+  overflow: hidden;
+  text-overflow: ellipsis;
+`
+
+const stockImage = 'https://upload.wikimedia.org/wikipedia/commons/thumb/5/56/Glendronach_pot_stills.jpeg/1280px-Glendronach_pot_stills.jpeg'
 
 //CLASS STARTS
 class Breweries extends React.Component {
@@ -31,7 +39,8 @@ class Breweries extends React.Component {
   }
 
   //GET 10 BREWERIES AT A TIME AS LONG AS THERE ARE BREWERIES TO GET
-  getBreweries = (props, page = 1) => {
+  getBreweries = (props) => {
+    const { page } = this.state
     const { dispatch } = this.props
     const url = `/api/all_breweries/?page=${page}&per_page=10`
       axios.get(url)
@@ -57,33 +66,49 @@ class Breweries extends React.Component {
 
   //LIVE SEARCH OF BREWERIES
   search = (term) => {
-    const {dispatch} = this.props;
       axios.get(`/api/search_breweries?query=${term}`)
       .then(res => {
         this.setState({breweries: res.data.entries})
       })
-      .catch( error => {
-        dispatch(setFlash('Your brewery does not seem to exist! Search again') )
-      })
     }
 
-    
-    image = (brewery) => {
+    //FUNCTIONS TO HANDLE DISPLAYING BREWERIES
+    breweryImage = (brewery) => {
       return (
-        <Image centered size='large' src={brewery.images.large} />
-      )
+        brewery.images ? <Image centered size='large' src={brewery.images.large} /> : <Image centered size='tiny' src={stockImage} />
+      )}
+
+    breweryWebsite = (brewery) => {
+      if (brewery.website){
+      return <Card.Meta>
+                <Truncated>
+                  <a 
+                    href={`${brewery.website}`}
+                    target="_blank"
+                    rel="noopener norefferer"
+                    >
+                     {brewery.website}
+                  </a>
+                </Truncated>
+            </Card.Meta>
+      } else {
+        return <Card.Meta>
+                No Website Available
+              </Card.Meta>
+        }
     }
 
+    //BUILDING THE LOOK OF THE BREWERIES
     displayBreweries = () => {
-      const { page, hasMore } = this.state
       const {breweries} = this.state
-      return breweries.map(brewery => {
+      return breweries.map( (brewery, i) => {
         return (
-          <StyledCard key={brewery.id}>
+          <StyledCard key={i}>
           <Card.Content>
-          {brewery.images ? this.image(brewery) : <Image centered size='small' src={stockImage} />}
-            <Card.Header>{brewery.name}</Card.Header>
-            <Card.Meta>{brewery.website}</Card.Meta>
+            {this.breweryImage(brewery)}
+          <Divider/>
+          <Card.Header textAlign='center'>{brewery.name}</Card.Header>
+            {this.breweryWebsite(brewery)}
           </Card.Content>
           {/* <Card.Description>
             { beer.description }
@@ -98,7 +123,7 @@ class Breweries extends React.Component {
     });
   }
   
-  
+  //MANIFEST OF WHAT IS GETTING LISTED ON PAGE
   render() {
     const { page, hasMore } = this.state
     return (
@@ -124,19 +149,6 @@ class Breweries extends React.Component {
   }
 }
 
-
-
-
-
-
-const mapStateToProps = (state) => {
-  const { breweries } = state
-  return {
-    breweries,
-  }
-}
-
-
-export default connect(mapStateToProps)(Breweries)
+export default connect()(Breweries)
 
 

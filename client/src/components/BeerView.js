@@ -1,7 +1,5 @@
 import React from 'react';
 import axios from 'axios';
-import styled from 'styled-components';
-import {Link} from 'react-router-dom'
 import {
   Grid,
   Segment,
@@ -9,7 +7,6 @@ import {
   Header,
   Image,
   Container,
-  Button
 } from 'semantic-ui-react';
 
 
@@ -44,12 +41,12 @@ class BeerView extends React.Component {
       return  <p> No style at all </p>
     else
     return (
-      style.name ?  <Header  as="h3" color='yellow'> {style.name} </Header>  :   <Header as="h3" color='yellow'> 'I am beer' </Header> 
+      style.name ?  <Header  as="h3" textAlign='right' color='yellow'> {style.name} </Header>  :   <Header as="h3" color='yellow'> 'I am beer' </Header> 
     )}
 
   beerAbv = (beer) => {
     return(
-      beer.abv ? <Header as="h3" color='yellow'> ABV: {beer.abv}</Header> : <Header as="h3" color='yellow'> ABV: Unavailable </Header>
+      beer.abv ? <Header as="h3" textAlign='right' color='yellow'> ABV: {beer.abv}</Header> : <Header as="h3" color='yellow'> ABV: Unavailable </Header>
     )
   }
   
@@ -58,28 +55,28 @@ class BeerView extends React.Component {
       beer.description ? <p> {beer.description} </p> : <p> No description available </p>
     )
   }
+
+  //WHAT IS BEING RENDERED ON THE PAGE
       render() {
       const { beer }  = this.state
       return (
         <Container>
-        <Divider />
-          <Segment>
-        <Grid>
-          <Grid.Row>
-            <Grid.Column width={8}>
-              { this.beerName(beer) }
-              { this.beerDescription(beer)}
-            </Grid.Column>
-            <Grid.Column width={8}>
-              { this.beerLabel(beer) }
-            </Grid.Column>
-          </Grid.Row>
-          <Grid.Row>
-            { this.beerAbv(beer) }
-            { this.beerStyle(beer) }
-          </Grid.Row>
-        </Grid>
-          </Segment>
+          <Divider />
+            <Segment>
+              <Grid>
+                <Grid.Row>
+                  <Grid.Column width={8}>
+                    { this.beerName(beer) }
+                    { this.beerDescription(beer)}
+                    { this.beerStyle(beer) }
+                    { this.beerAbv(beer) }
+                  </Grid.Column>
+                  <Grid.Column width={8}>
+                    { this.beerLabel(beer) }
+                  </Grid.Column>
+                </Grid.Row>
+              </Grid>
+            </Segment>
         </Container>
       )
   }
