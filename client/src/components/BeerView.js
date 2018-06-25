@@ -1,9 +1,9 @@
 import React from 'react';
 import axios from 'axios';
-import Beers from './Beers'
 import {
   Grid,
-  Button,
+  Dimmer,
+  Loader,
   Segment,
   Divider,
   Header,
@@ -26,15 +26,26 @@ const ButtonLink = styled.a`
 
 
 class BeerView extends React.Component {
-  state = { beer: {} }
+  state = { beer: {}, loading: true }
 
   componentDidMount() {
     const {id} = this.props.match.params
     axios.get(`/api/beer/${id}`)
       .then(res => {
         this.setState({beer: res.data.entries[0]})
+      }).then( () => {
+        this.setState( {loading: false} )
       })
   }
+
+  //STYLING MY DIMMER DURING LOADING
+  nowLoading = () => {
+    return ( 
+      <Dimmer active style= { { height: '700px' } }>
+         <Loader size="huge"> Loading </Loader>
+       </Dimmer>
+     )
+   }  
 
   // FUNCTIONS TO HELP DISPLAY BEERS
   beerName = (beer) => {
@@ -70,6 +81,13 @@ class BeerView extends React.Component {
 
   //WHAT IS BEING RENDERED ON THE PAGE
       render() {
+        if (this.state.loading) {
+          return (
+            <Container>
+               {this.nowLoading()}
+            </Container>
+          )
+        } else {
       const { beer }  = this.state
       return (
         <Container>
@@ -97,6 +115,7 @@ class BeerView extends React.Component {
                 </ButtonLink>
         </Container>
       )
+    }
   }
 }
 

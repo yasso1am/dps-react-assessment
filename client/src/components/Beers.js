@@ -7,6 +7,8 @@ import styled from 'styled-components'
 import InfiniteScroll from 'react-infinite-scroller'
 import {
   Segment,
+  Loader,
+  Dimmer,
   Container, 
   Header,
   Card,
@@ -26,7 +28,7 @@ const StyledCard = styled(Card)`
 
 //CLASS STARTS
 class Beers extends React.Component {
-  state = { beers: [], page: 5, hasMore: true, visible: [], search: '' }
+  state = { beers: [], page: 5, hasMore: true, visible: [], search: '', loading: true}
 
   //LIFECYCLE METHOD
   componentDidMount() {
@@ -48,13 +50,35 @@ class Beers extends React.Component {
         })
         .catch(error => {
           dispatch(setFlash('Where did the beers go? Please try again later!'))
+        }).then( () => {
+          this.setState( {loading: false} )
         })
       }
-  
+    
+  //STYLING MY DIMMER DURING LOADING
+  nowLoading = () => {
+    return ( 
+      <Dimmer active style= { { height: '700px' } }>
+         <Loader size="huge"> Loading </Loader>
+       </Dimmer>
+     )
+   }
+   
+  //  //STYLING LOADER DURING SCROLLING
+  //  moreBeerLoader = () =>{
+  //    const {beerLoad} = this.state
+  //     if (beerLoad)
+  //       return (
+  //       <Dimmer active inverted>
+  //         <Loader size="huge" active />
+  //       </Dimmer>
+  //       )
+  //  }
+   
   //LOADS MORE BEERS
   loadMore = () => {
-    const page = this.state.page
-    this.getBeers(this.props, page)
+      const page = this.state.page
+        this.getBeers(this.props, page)
     }
 
   //LIVE SEARCH OF BEERS INCLUDING AXIOS CALL/QUERY      
@@ -117,7 +141,14 @@ class Beers extends React.Component {
 
   //WHAT IS ACTUALLY BEING RENDERED ON THE PAGE - violation on scroll in console but works
   render() {
-    const { page, hasMore } = this.state
+    const { page, hasMore, loading } = this.state
+    if (loading) {
+      return (
+        <Container>
+         {this.nowLoading()}
+        </Container>
+      )
+    } else {
     return (
       <Segment inverted>
         <Divider />
@@ -136,9 +167,11 @@ class Beers extends React.Component {
             { this.displayBeers() }
           </Card.Group>
           </InfiniteScroll>
+           {/* { this.moreBeerLoader() } */}
         </Container>
       </Segment>
-    )
+      )
+    }
   }
 }
 

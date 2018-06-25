@@ -9,6 +9,8 @@ import {
   Header,
   Card,
   Image,
+  Dimmer,
+  Loader,
   Divider,
 } from 'semantic-ui-react'
 import styled from 'styled-components'
@@ -31,7 +33,7 @@ const stockImage = 'https://upload.wikimedia.org/wikipedia/commons/thumb/5/56/Gl
 
 //CLASS STARTS
 class Breweries extends React.Component {
-  state = { breweries: [], page: 1, hasMore: true, visible: [], search: '' }
+  state = { breweries: [], page: 1, hasMore: true, visible: [], search: '', loading: true}
 
   //LIFECYCLE METHOD
   componentDidMount() {
@@ -54,15 +56,34 @@ class Breweries extends React.Component {
           })
           .catch(error => {
             dispatch(setFlash('Where did the beers go? Please try again later!'))
+          }).then( () => {
+            this.setState({ loading: false })
           })
         }
   
   //INCREMENT PAGE AND CALL GETBREWERIES
   loadMore = () => {
+    // this.setState( {appLoad: true })
     const page = this.state.page
     this.getBreweries(this.props, page)
     }
 
+  //STYLING MY DIMMER DURING INITIAL LOADING
+  initialLoading = () => {
+    return ( 
+      <Dimmer active style= { { height: '700px' } }>
+         <Loader size="huge"> Loading </Loader>
+      </Dimmer>
+     )
+   }
+
+  //  //STYLING LOADER DURING SCROLLING
+  //  moreBreweriesLoader = () =>{
+  //   const {brewLoad} = this.state
+  //   if (brewLoad)
+  //   return
+  //     <Loader size="huge" active />
+  //  }
 
   //LIVE SEARCH OF BREWERIES
   search = (term) => {
@@ -107,16 +128,10 @@ class Breweries extends React.Component {
           <Card.Content>
             {this.breweryImage(brewery)}
           <Divider/>
-          <Card.Header textAlign='center'>{brewery.name}</Card.Header>
+          <Card.Header >{brewery.name}</Card.Header>
             {this.breweryWebsite(brewery)}
-          </Card.Content>
-          {/* <Card.Description>
-            { beer.description }
-          </Card.Description> */}
+          </Card.Content>``
           <Card.Content extra>
-            {/* <Link to={`/beers/${beer.name}`}> */}
-              {/* View */}
-            {/* </Link> */}
           </Card.Content>
         </StyledCard>
       );
@@ -125,11 +140,18 @@ class Breweries extends React.Component {
   
   //MANIFEST OF WHAT IS GETTING LISTED ON PAGE
   render() {
-    const { page, hasMore } = this.state
+    const { page, hasMore, loading } = this.state
+    if (loading) {
+      return (
+        <Container>
+           {this.initialLoading()}
+        </Container>
+      )
+    } else {
     return (
       <Segment inverted>
         <Divider />
-          <Header as="h2" textAlign="center" color="yellow">Breweries</Header>
+          <Header as="h2" textAlign='center' color="yellow">Breweries</Header>
           <SearchEngine onSearch={this.search} />
         <Divider />
         <Container style={{height: '100vh', overflowY:'scroll', overflowX:'hidden'}}>
@@ -142,10 +164,12 @@ class Breweries extends React.Component {
           <Card.Group itemsPerRow={5}>
             { this.displayBreweries() }
           </Card.Group>
+            {/* { this.moreBreweriesLoader() } */}
           </InfiniteScroll>
         </Container>
       </Segment>
-    )
+      )
+    }
   }
 }
 
